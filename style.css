@@ -7,7 +7,10 @@
 
 /* Base page styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Merriweather Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
   background-color: #f1f1f1;
   padding: 20px;
 }
@@ -29,8 +32,10 @@ body {
 }
 
 h1 {
-  font-family: Verdana, sans-serif;
-  font-weight: bold;
+  font-family: "Merriweather Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
   color: #212121;
 }
 
@@ -53,8 +58,10 @@ h1 {
 /* Inputs and buttons */
 input[type="date"],
 button {
-  font-family: Arial, sans-serif;
-  font-weight: normal;
+  font-family: "Merriweather Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
   color: #666;
   padding: 10px 15px;
   border: 1px solid #ddd;
