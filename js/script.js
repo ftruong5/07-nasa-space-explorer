@@ -2,7 +2,7 @@
 const startInput = document.getElementById('startDate');
 const endInput = document.getElementById('endDate');
 
-const button = document.querySelector('button');
+const button = document.getElementById('exploreBtn');
 const gallery = document.getElementById('gallery');
 
 const modal = document.getElementById("imageModal");
@@ -11,6 +11,40 @@ const modalTitle = document.getElementById("modalTitle");
 const modalDate = document.getElementById("modalDate");
 const modalExplanation = document.getElementById("modalExplanation");
 const closeModal = document.getElementById("closeModal");
+
+const factText = document.getElementById("factText");
+const newFactButton = document.getElementById("newFactButton");
+
+// Space facts
+const spaceFacts = [
+  "A day on Venus is longer than a year on Venus.",
+  "Neutron stars are so dense that a teaspoon of their material would weigh billions of tons.",
+  "There are more stars in the universe than there are grains of sand on all the beaches on Earth.",
+  "Jupiter is the largest planet in our solar system.",
+  "One million Earths could fit inside the Sun.",
+  "Saturn's rings are made mostly of ice and rock.",
+  "Mars has the largest volcano in the solar system, Olympus Mons.",
+  "Light from the Sun takes about 8 minutes to reach Earth.",
+  "The footprints left by astronauts on the Moon could last for millions of years.",
+  "Space is completely silent because there is no air to carry sound."
+];
+
+// Pick a random space fact (make sure it's different every time)
+let currentFact = -1;
+
+function showRandomFact() {
+  let randomNumber;
+
+  do {
+    randomNumber = Math.floor(Math.random() * spaceFacts.length);
+  } while (randomNumber === currentFact);
+
+  currentFact = randomNumber;
+
+  factText.textContent = spaceFacts[randomNumber];
+}
+
+newFactButton.addEventListener("click", showRandomFact);
 
 // My NASA API key
 const API_KEY = "jsWCAEExdm9CYwMx5IA1O9zk9c9Iv7TN85A833Kh";
@@ -35,8 +69,8 @@ async function getSpaceImages() {
   // Loading Message
   gallery.innerHTML = `
     <div class="placeholder">
-      <div class="placeholder-icon">🔭</div>
-      <p>Loading space images...</p>
+      <div class="loader"></div>
+      <p>Exploring the cosmos...</p>
     </div>
   `;
 
@@ -70,7 +104,6 @@ async function getSpaceImages() {
 
     gallery.innerHTML = `
       <div class="placeholder">
-        <div class="placeholder-icon">⚠️</div>
         <p>Sorry, we couldn't load the space images.</p>
       </div>
     `;
@@ -103,7 +136,7 @@ function displayImages(images) {
     card.innerHTML = `
       <img src="${image.url}" alt="${image.title}">
 
-      <h2>${image.title}</h2>
+      <h2><span class="title-star">✦</span>${image.title}</h2>
 
       <p><strong>Date:</strong> ${image.date}</p>
     `;
@@ -116,7 +149,6 @@ function displayImages(images) {
   if (gallery.innerHTML === "") {
     gallery.innerHTML = `
       <div class="placeholder">
-        <div class="placeholder-icon">🌌</div>
         <p>No images were found for this date range.</p>
       </div>
     `;
@@ -127,18 +159,28 @@ function openModal(image) {
   modalImage.src = image.url;
   modalImage.alt = image.title;
 
-  modalTitle.textContent = image.title;
+  modalTitle.innerHTML = `<span class="title-star">✦</span>${image.title}`;
   modalDate.textContent = "Date: " + image.date;
   modalExplanation.textContent = image.explanation;
 
-  modal.style.display = "block";
+  modal.style.display = "flex";
+
+  setTimeout(function () {
+    modal.classList.add("show");
+  }, 10);
 }
 
 closeModal.addEventListener("click", function () {
-  modal.style.display = "none";
+  modal.classList.remove("show");
+
+  setTimeout(function () {
+    modal.style.display = "none";
+  }, 250);
 });
 
 button.addEventListener("click", getSpaceImages);
+
+showRandomFact();
 
 // Call the setupDateInputs function from dateRange.js
 // This sets up the date pickers to:
