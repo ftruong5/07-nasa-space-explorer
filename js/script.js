@@ -73,13 +73,12 @@ async function getSpaceImages() {
       <p>Exploring the cosmos...</p>
     </div>
   `;
-
+  
   // Create the NASA API URL
-  const url =
-    `https://api.nasa.gov/planetary/apod` +
-    `?api_key=${API_KEY}` +
-    `&start_date=${startDate}` +
-    `&end_date=${endDate}`;
+  const url = new URL("https://science.nasa.gov/wp-json/wp/v2/apod-basic/");
+  url.searchParams.set("start_date", startDate);
+  url.searchParams.set("end_date", endDate);
+  url.searchParams.set("api_key", API_KEY);
 
   try {
 
@@ -94,9 +93,10 @@ async function getSpaceImages() {
     // Turn NASA's response into JavaScript data
     const data = await response.json();
 
-    // Show the images in the gallery
-    displayImages(data);
+    // Make sure the data is an array of images
+    const images = Array.isArray(data) ? data : [data];
 
+    displayImages(images);
   } catch (error)  {
 
     // Show error message if something went wrong
@@ -134,7 +134,7 @@ function displayImages(images) {
 
     // Add the image, title, date, and explanation
     card.innerHTML = `
-      <img src="${image.url}" alt="${image.title}">
+      <img src="${image.hdurl}" alt="${image.alt || image.title}">
 
       <h2><span class="title-star">✦</span>${image.title}</h2>
 
@@ -156,8 +156,8 @@ function displayImages(images) {
 }
 
 function openModal(image) {
-  modalImage.src = image.url;
-  modalImage.alt = image.title;
+  modalImage.src = image.hdurl;
+  modalImage.alt = image.alt || image.title;  
 
   modalTitle.innerHTML = `<span class="title-star">✦</span>${image.title}`;
   modalDate.textContent = "Date: " + image.date;
